@@ -1,8 +1,10 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   import Button from "../shared/button.svelte";
   let fields = { question: "", answerA: "", answerB: "" };
   let errors = { question: "", answerA: "", answerB: "" };
   let valid = false;
+  let dispatch = createEventDispatcher();
 
   const submitHandler = () => {
     valid = true;
@@ -29,7 +31,8 @@
     }
 
     if (valid) {
-      console.log("valid", fields);
+      let poll = { ...fields, votesA: 0, votesB: 0, id: Math.random() };
+      dispatch("add", poll);
     }
   };
 </script>
