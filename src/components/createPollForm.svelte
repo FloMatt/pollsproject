@@ -1,6 +1,8 @@
 <script>
+  import PollStore from "../stores/pollstore.js";
   import { createEventDispatcher } from "svelte";
   import Button from "../shared/button.svelte";
+
   let fields = { question: "", answerA: "", answerB: "" };
   let errors = { question: "", answerA: "", answerB: "" };
   let valid = false;
@@ -32,7 +34,11 @@
 
     if (valid) {
       let poll = { ...fields, votesA: 0, votesB: 0, id: Math.random() };
-      dispatch("add", poll);
+      //save poll to store
+      PollStore.update((currentPolls) => {
+        return [poll, ...currentPolls];
+      });
+      dispatch("add");
     }
   };
 </script>
@@ -53,7 +59,7 @@
     <input type="text" id="answer-b" bind:value={fields.answerB} />
     <div class="error">{errors.answerB}</div>
   </div>
-  <Button type={"secondary"} flat={true}>Add Poll</Button>
+  <Button>Add Poll</Button>
 </form>
 
 <style>
